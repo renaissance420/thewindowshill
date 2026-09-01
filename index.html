@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>the windows hill</title>
+<meta name="description" content="the most viewed image in human history. you just viewed it again.">
+
+<!-- og:image / og:url must be absolute — update the domain at launch -->
+<meta property="og:title" content="the windows hill">
+<meta property="og:description" content="the most viewed image in human history. you just viewed it again.">
+<meta property="og:image" content="https://thewindowshill.com/hill.jpg">
+<meta property="og:url" content="https://thewindowshill.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+  body {
+    /* fallback ground if the image never loads */
+    background: linear-gradient(to bottom, #2f71d4 0%, #7db4e8 52%, #57a838 56%, #2e7d1e 100%);
+    font-family: Tahoma, Verdana, Geneva, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #hill {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* keep the crest in frame when portrait crops the sides */
+    object-position: 28% 58%;
+  }
+  body.no-image #hill { display: none; }
+
+  #stars {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52%;
+    opacity: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 8% 22%,  rgba(255,255,255,.8) 50%, transparent 51%),
+      radial-gradient(1px 1px at 17% 61%, rgba(255,255,255,.5) 50%, transparent 51%),
+      radial-gradient(2px 2px at 26% 12%, rgba(255,255,255,.6) 50%, transparent 51%),
+      radial-gradient(1px 1px at 33% 44%, rgba(255,255,255,.7) 50%, transparent 51%),
+      radial-gradient(1px 1px at 41% 27%, rgba(255,255,255,.45) 50%, transparent 51%),
+      radial-gradient(2px 2px at 49% 66%, rgba(255,255,255,.5) 50%, transparent 51%),
+      radial-gradient(1px 1px at 56% 9%,  rgba(255,255,255,.75) 50%, transparent 51%),
+      radial-gradient(1px 1px at 63% 38%, rgba(255,255,255,.5) 50%, transparent 51%),
+      radial-gradient(2px 2px at 71% 19%, rgba(255,255,255,.65) 50%, transparent 51%),
+      radial-gradient(1px 1px at 78% 55%, rgba(255,255,255,.5) 50%, transparent 51%),
+      radial-gradient(1px 1px at 85% 30%, rgba(255,255,255,.7) 50%, transparent 51%),
+      radial-gradient(1px 1px at 92% 70%, rgba(255,255,255,.4) 50%, transparent 51%),
+      radial-gradient(2px 2px at 96% 15%, rgba(255,255,255,.55) 50%, transparent 51%),
+      radial-gradient(1px 1px at 12% 80%, rgba(255,255,255,.35) 50%, transparent 51%),
+      radial-gradient(1px 1px at 68% 84%, rgba(255,255,255,.35) 50%, transparent 51%);
+  }
+
+  #stamp {
+    position: fixed;
+    right: calc(16px + env(safe-area-inset-right, 0px));
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    text-align: right;
+    color: rgba(255,255,255,.65);
+    font-size: 11px;
+    line-height: 1.7;
+    text-shadow: 0 1px 3px rgba(0,0,0,.55);
+    user-select: none;
+  }
+  #stamp h1 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    color: rgba(255,255,255,.9);
+  }
+  #tagline { margin-bottom: 10px; }
+
+  table {
+    margin-left: auto;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  td {
+    padding: 0 0 0 14px;
+    text-align: right;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  #contract {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0 0 2px 0;
+    font: inherit;
+    font-size: 12px;
+    color: rgba(255,255,255,.65);
+    text-shadow: inherit;
+    cursor: pointer;
+    display: inline-block;
+  }
+  #contract[disabled] { cursor: default; }
+
+  #links a {
+    color: rgba(255,255,255,.65);
+    text-decoration: none;
+    margin-left: 12px;
+  }
+  #links a:hover { text-decoration: underline; }
+  #links a svg {
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
+    vertical-align: -1px;
+  }
+  #links a:hover svg { fill: rgba(255,255,255,.9); }
+
+  #contract:focus-visible,
+  #links a:focus-visible {
+    outline: 1px solid rgba(255,255,255,.85);
+    outline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<img id="hill" src="hill.jpg" alt="" onerror="document.body.classList.add('no-image')">
+<div id="stars" aria-hidden="true"></div>
+
+<main id="stamp">
+  <h1>the windows hill</h1>
+  <div id="tagline">the most viewed image in human history<br>you just viewed it again</div>
+  <table id="tokenomics"><tbody></tbody></table>
+  <button id="contract" type="button"></button>
+  <nav id="links"></nav>
+</main>
+
+<script src="config.js"></script>
+<script>
+
+// tokenomics rows
+const tbody = document.querySelector('#tokenomics tbody');
+for (const [k, v] of TOKENOMICS) {
+  const tr = document.createElement('tr');
+  const a = document.createElement('td'); a.textContent = k;
+  const b = document.createElement('td'); b.textContent = v;
+  tr.append(a, b);
+  tbody.append(tr);
+}
+
+// links — empty URLs are hidden, not rendered dead
+const links = document.getElementById('links');
+const X_LOGO = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
+for (const [label, url] of [['chart', CHART_URL], ['x', X_URL], ['telegram', TG_URL]]) {
+  if (!url) continue;
+  const a = document.createElement('a');
+  if (label === 'x') {
+    a.innerHTML = X_LOGO;
+    a.setAttribute('aria-label', 'x');
+  } else {
+    a.textContent = label;
+  }
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  links.append(a);
+}
+
+// contract address + copy
+const btn = document.getElementById('contract');
+function shorten(addr) {
+  return addr.length > 14 ? addr.slice(0, 6) + '…' + addr.slice(-4) : addr;
+}
+if (CONTRACT) {
+  btn.textContent = shorten(CONTRACT);
+  btn.setAttribute('aria-label', 'copy contract address');
+  let revert;
+  btn.addEventListener('click', () => {
+    const done = () => {
+      btn.textContent = 'address copied';
+      clearTimeout(revert);
+      revert = setTimeout(() => { btn.textContent = shorten(CONTRACT); }, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(CONTRACT).then(done, () => legacyCopy(done));
+    } else {
+      legacyCopy(done);
+    }
+  });
+  function legacyCopy(done) {
+    const ta = document.createElement('textarea');
+    ta.value = CONTRACT;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.append(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    ta.remove();
+  }
+} else {
+  btn.textContent = 'contract at launch';
+  btn.disabled = true;
+}
+
+// time-of-day grade — a real filter pass over the image, re-checked each minute
+const hill = document.getElementById('hill');
+const stars = document.getElementById('stars');
+// [hour, sepia, saturate, brightness, hue-rotate, contrast]
+// sepia runs before saturate so evening warmth stays golden instead of gray
+const STOPS = [
+  [0,    0,   .55,  .32,   0, 1.05],
+  [4.5,  0,   .55,  .32,   0, 1.05],
+  [6,    .30, 1.1,  .60,  -6, 1   ],
+  [8,    .10, 1.05, .92,  -2, 1   ],
+  [11,   0,   1,    1,     0, 1   ],
+  [15.5, 0,   1,    1,     0, 1   ],
+  [17.5, .28, 1.25, .93,  -6, 1   ],
+  [19.5, .50, 1.5,  .68, -10, 1   ],
+  [21,   .20, 1,    .45,  -4, 1.03],
+  [22.5, 0,   .55,  .32,   0, 1.05],
+  [24,   0,   .55,  .32,   0, 1.05],
+];
+function grade() {
+  const now = new Date();
+  const h = now.getHours() + now.getMinutes() / 60;
+  let i = 0;
+  while (STOPS[i + 1][0] < h) i++;
+  const [h0, ...a] = STOPS[i];
+  const [h1, ...b] = STOPS[i + 1];
+  const t = (h - h0) / (h1 - h0);
+  const [se, sa, br, hu, co] = a.map((v, j) => v + (b[j] - v) * t);
+  hill.style.filter =
+    'sepia(' + se.toFixed(3) + ') saturate(' + sa.toFixed(3) + ')' +
+    ' brightness(' + br.toFixed(3) + ') hue-rotate(' + hu.toFixed(1) + 'deg)' +
+    ' contrast(' + co.toFixed(3) + ')';
+  // faint stars once it's properly dark
+  stars.style.opacity = br < .5 ? ((.5 - br) / .18 * .7).toFixed(2) : 0;
+}
+grade();
+setInterval(grade, 60000);
+</script>
+
+</body>
+</html>
