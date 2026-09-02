@@ -217,17 +217,17 @@ const stars = document.getElementById('stars');
 // [hour, sepia, saturate, brightness, hue-rotate, contrast]
 // sepia runs before saturate so evening warmth stays golden instead of gray
 const STOPS = [
-  [0,    0,   .55,  .32,   0, 1.05],
-  [4.5,  0,   .55,  .32,   0, 1.05],
-  [6,    .30, 1.1,  .60,  -6, 1   ],
+  [0,    0,   .60,  .46,   0, 1.04],
+  [4.5,  0,   .60,  .46,   0, 1.04],
+  [6,    .30, 1.1,  .62,  -6, 1   ],
   [8,    .10, 1.05, .92,  -2, 1   ],
   [11,   0,   1,    1,     0, 1   ],
   [15.5, 0,   1,    1,     0, 1   ],
   [17.5, .28, 1.25, .93,  -6, 1   ],
   [19.5, .50, 1.5,  .68, -10, 1   ],
-  [21,   .20, 1,    .45,  -4, 1.03],
-  [22.5, 0,   .55,  .32,   0, 1.05],
-  [24,   0,   .55,  .32,   0, 1.05],
+  [21,   .20, 1,    .55,  -4, 1.02],
+  [22.5, 0,   .60,  .46,   0, 1.04],
+  [24,   0,   .60,  .46,   0, 1.04],
 ];
 function grade() {
   const now = new Date();
@@ -243,7 +243,7 @@ function grade() {
     ' brightness(' + br.toFixed(3) + ') hue-rotate(' + hu.toFixed(1) + 'deg)' +
     ' contrast(' + co.toFixed(3) + ')';
   // faint stars once it's properly dark
-  stars.style.opacity = br < .5 ? ((.5 - br) / .18 * .7).toFixed(2) : 0;
+  stars.style.opacity = br < .56 ? Math.min((.56 - br) / .1 * .7, .7).toFixed(2) : 0;
 }
 grade();
 setInterval(grade, 60000);
