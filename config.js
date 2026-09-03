@@ -7,9 +7,12 @@ const CHART_URL = '';              // dexscreener link — empty hides the link
 const X_URL     = 'https://x.com/thewindowshill';
 const TG_URL    = '';              // telegram link — empty hides the link
 
+/* matches a default long.xyz launch on robinhood chain —
+   set 'pair' to whichever stock token you actually pair with */
 const TOKENOMICS = [
   ['supply', '1,000,000,000'],
+  ['pair',   'msft'],
   ['tax',    '0 / 0'],
-  ['lp',     'burned'],
+  ['lp',     'locked'],
   ['mint',   'revoked'],
 ];
